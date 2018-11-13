@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+<script src="js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/angular.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/ui-bootstarp-tpls.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body ng-app="ui.bootstrap.demo">
+<div class="row" style="margin-left: 0;margin-right: 0;" ng-controller="PaginationDemoCtrl">
+	<div class="col-sm-12" style="margin: 50px auto;">
+		<table class="table table-bordered table-hover" style="text-align: center">
+			<thead style="background: #f5f5f5;"
+				<tr style="text-align: center">
+					<th style="text-align: center">字段</th>
+					<th style="text-align: center">字段</th>
+					<th style="text-align: center">字段</th>
+					<th style="text-align: center">字段</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="item in allitem[0]">
+					<td ng-bind="item.a"></td>
+					<td ng-bind="item.b"></td>
+					<td ng-bind="item.c"></td>
+					<td ng-bind="item.d"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="col-sm-12 text-center">
+		<ul uib-pagination 
+			total-items="totalItems" 
+			num-pages="numPages" 
+			items-per-page="pageSize" 
+			ng-model="currentPage" 
+			ng-change="pageChanged()" 
+			force-ellipses="true" 
+			rotate="true" 
+			max-size="maxSize" 
+			first-text="首页" 
+			previous-text="上一页" 
+			next-text="下一页" 
+			last-text="末页" 
+			boundary-links="true" 
+			boundary-link-numbers="true">
+		</ul uib-pagination>
+	</div>
+</div>
+</body>
+<script type="text/javascript">
+	angular.module('ui.bootstrap.demo', ['ui.bootstrap']).controller('PaginationDemoCtrl', function($scope) {
+		$scope.maxSize = 5; // max-size 可以直接点击跳转的页数
+		$scope.totalItems = 43; //total-items 总条数
+		$scope.pageSize = 8; //items-per-page 每页显示条数
+		$scope.currentPage = 1; //ng-model 当前页数
+		$scope.numPages = Math.ceil($scope.totalItems / $scope.pageSize) //num-pages 总页数 Math.ceil()向上取整
+		$scope.allitem = []; //每页所有数据
+		$scope.data = [];
+		for(let i = 0; i < $scope.totalItems; i++) {
+			let item = new Object();
+			item.a = i;
+			item.b = i;
+			item.c = i;
+			item.d = i;
+			$scope.data.push(item);
+		}
+
+		getPageData();
+		$scope.pageChanged = function() {
+			//        $log.log('Page changed to: ' + $scope.currentPage);
+			getPageData();
+		};
+
+		function getPageData() {
+			$scope.allitem = [];
+			let index = $scope.pageSize * ($scope.currentPage - 1);
+			$scope.allitem.push($scope.data.slice(index, index + $scope.pageSize));
+		}
+
+
+	});
+</script>
+
+</html>
